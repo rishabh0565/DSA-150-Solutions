@@ -3,25 +3,8 @@ package LinkedList;
 
 public class Main {
   public static void main(String[] args) {
-	   CopyLinkedListWithRandomPointer cllwrp = new CopyLinkedListWithRandomPointer(); 
-	   Node head = new Node(3); 
-	   head.next = new Node(7); 
-	   head.random = null; 
-	   Node second = head.next; 
-	   second.next = new Node(4); // second random remaining; 
-	   
-	   Node third = second.next; 
-	   third.next = new Node(5); 
-	   third.random = head; 
-	   
-	   Node fourth = third.next; 
-	   fourth.next = null; 
-	   fourth.random = second; 
-	   
-	   second.random = fourth; 
-	   // Node.display(head);
-	   Node resHead = cllwrp.copyRandomList(head); 
-	   Node.display(resHead);
+	  FindTheDuplicateNumber ftdn = new FindTheDuplicateNumber(); 
+	 System.out.println( ftdn.findDuplicate(new int[] {1,9,2,3,4,5,6,7,8,2}));
 	   
    }
   
