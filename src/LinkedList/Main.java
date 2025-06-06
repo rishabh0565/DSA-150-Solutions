@@ -3,8 +3,10 @@ package LinkedList;
 
 public class Main {
   public static void main(String[] args) {
-	  FindTheDuplicateNumber ftdn = new FindTheDuplicateNumber(); 
-	 System.out.println( ftdn.findDuplicate(new int[] {1,9,2,3,4,5,6,7,8,2}));
+	 ReverseNodesInKGroups rnikg =  new ReverseNodesInKGroups(); 
+	 ListNode head1 = createLinkedList(new int[] {1,2,3,4,5,67});
+     ListNode listNode =  rnikg.reverseKGroup(head1, 4); 
+     display(listNode);
 	   
    }
   
@@ -23,42 +25,56 @@ public class Main {
 	  System.out.println();
 	    ListNode curr = head ; 
 	    while(curr!=null) {
-	    	 System.out.print(curr.val + " ");
+	    	 System.out.print(curr.val + " -> ");
 	    	 curr = curr.next; 
 	    }
+	    System.out.print("END");
  }
 }
+
+
+
+
 ////////////////////////////////////////////  
 //  used for question 
-class Node {
+ class Nodee {
     int val;
-    Node next;
-    Node random;
+    Nodee next;
+    Nodee random;
 
-    public Node(int val) {
+    public Nodee(int val) {
         this.val = val;
         this.next = null;
         this.random = null;
     }
-    public static Node createLinkedList(int [] arr) {
-    	Node dummy  = new Node(0); 
-    	Node current  = dummy; 
+    public static Nodee createLinkedList(int [] arr) {
+    	Nodee dummy  = new Nodee(0); 
+    	Nodee current  = dummy; 
     	  for(int a : arr) {
-    		  current.next = new Node(a); 
+    		  current.next = new Nodee(a); 
     		  current = current.next; 
     	  }
     	  return dummy.next; 
     }
     
-    public static void display(Node head) {
+    public static void display(Nodee head) {
   	  System.out.println();
-  	Node curr = head ; 
+  	Nodee curr = head ; 
   	    while(curr!=null) {
   	    	 System.out.print("Node : "+   curr.val + " Next -> "  +  ((curr.next == null) ? "null" : curr.next.val) + "-> Random -> " + ((curr.random == null) ? "null" : curr.random.val) );
   	    	 System.out.println();
   	    	 curr = curr.next; 
   	    }
    }
+}
+ 
+ ///   copy linked list with random pointer
+ class NodeList {
+ int val;
+ NodeList next;
+ NodeList() {}
+ NodeList(int val) { this.val = val; }
+ NodeList(int val, NodeList next) { this.val = val; this.next = next; }		      
 }
 
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
 //ou are given the head of a linked list of length n. Unlike a singly linked list, each node contains an additional pointer random, which may point to any node in the list, or null.
 //
 //Create a deep copy of the list.
@@ -27,21 +28,21 @@ import java.util.Map;
 //
 //Output: [[3,null],[7,3],[4,0],[5,1]]
 public class CopyLinkedListWithRandomPointer {
-	   public Node copyRandomList(Node head) {
-		    Node curr = head;    
-		     HashMap <Node, Node> nodeMap = new HashMap<>(); 
+	   public NodeList copyRandomList(NodeList head) {
+		   NodeList curr = head;    
+		     HashMap <NodeList, NodeList> nodeMap = new HashMap<>(); 
 		     while(head!=null){
-		          Node newNode = new Node(head.val); 
+		    	 NodeList newNode = new NodeList(head.val); 
 		          nodeMap.put(head, newNode); 
 		          head = head.next; 
 		     }
 
 		    
-		    for(Map.Entry<Node,Node> entry : nodeMap.entrySet()){
-		         Node newNode  = entry.getValue();
-		         Node old = entry.getKey(); 
+		    for(Map.Entry<NodeList,NodeList> entry : nodeMap.entrySet()){
+		    	NodeList newNode  = entry.getValue();
+		    	NodeList old = entry.getKey(); 
 		        newNode.next = nodeMap.get(old.next); 
-		         newNode.random = nodeMap.get(old.random);  
+		         //newNode.random = nodeMap.get(old.random);  
 		    }
 
 		    return nodeMap.get(curr); 
