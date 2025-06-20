@@ -1,8 +1,11 @@
 package PracticeOnly;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -10,7 +13,190 @@ import java.util.Stack;
 public class Practice3 {
 
 	public static void main(String[] args) {
-		System.out.println(minWindow("adobecodebanc", "abc"));
+		int[] arr = new int[] { 2, 1, 5, 2, 3, 2 };
+		// sumSubArray(arr, 5);
+		// longestSubArray(arr, 5);
+		// subArrayProductLessThanK(new int[] { 10, 5, 2, 6 }, 100);
+
+		// smallestSubArrayWithSumS(arr, 7);
+		System.out.println(Arrays.toString(maxSlidingWindow(new int[] { 1, 2, 1, 0, 4, 2, 6 }, 3)));
+		firstNonRepeatingCharacter("aaaccaabbasfasfasfgasfas");
+	}
+
+	public static void firstNonRepeatingCharacter(String str) {
+		LinkedHashMap<Character, Integer> map = new LinkedHashMap<Character, Integer>();
+		for (int i = 0; i < str.length(); i++) {
+			map.put(str.charAt(i), map.getOrDefault(str.charAt(i), 0) + 1);
+		}
+
+		for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+			if (entry.getValue() == 1) {
+				System.out.println(entry.getKey());
+				return;
+			}
+		}
+	}
+
+	public static int[] maxSlidingWindow(int[] nums, int k) {
+		int[] res = new int[nums.length - k + 1];
+		int l = 0;
+		int r = 0;
+		Deque<Integer> queue = new ArrayDeque<>();
+		while (l <= r && r < nums.length) {
+			while (!queue.isEmpty() && nums[queue.peekLast()] < nums[r]) {
+				queue.pollLast();
+			}
+			queue.offerLast(r);
+			if (queue.peekFirst() < l) {
+				queue.pollFirst();
+			}
+
+			if (r - l + 1 == k) {
+				res[l] = nums[queue.peekFirst()];
+				l++;
+			}
+			r++;
+		}
+		return res;
+	}
+
+	public static String minWindow1(String s, String t) {
+		HashMap<Character, Integer> needMap = new HashMap<>();
+		HashMap<Character, Integer> haveMap = new HashMap<>();
+		for (int i = 0; i < t.length(); i++) {
+			needMap.put(t.charAt(i), needMap.getOrDefault(t.charAt(i), 0) + 1);
+		}
+		int need = needMap.size();
+		int have = 0;
+		int l = 0;
+		int min = Integer.MAX_VALUE;
+		int[] res = new int[2];
+		for (int r = 0; r < s.length(); r++) {
+			char c = s.charAt(r);
+			if (needMap.containsKey(c)) {
+				haveMap.put(c, haveMap.getOrDefault(c, 0) + 1);
+				if (haveMap.get(c) == needMap.get(c)) {
+					have++;
+				}
+			}
+			while (l <= r && have == need) {
+				char removeC = s.charAt(l);
+				if (haveMap.containsKey(removeC)) {
+					haveMap.put(removeC, haveMap.getOrDefault(removeC, 0) - 1);
+					if (haveMap.get(removeC) < needMap.get(removeC)) {
+						have--;
+					}
+				}
+				if (have == need && min > r - l + 1) {
+					min = r - l + 1;
+					res[0] = l;
+					res[1] = r;
+				}
+				l++;
+			}
+
+		}
+		StringBuilder sb = new StringBuilder("");
+		for (int i = res[0]; i <= res[1]; i++) {
+			sb.append(s.charAt(i));
+		}
+		return sb.toString();
+	}
+
+	public static void smallestSubArrayWithSumS(int arr[], int s) {
+		int l = 0;
+		int min = Integer.MAX_VALUE;
+		int[] res = new int[2];
+		int sum = 0;
+		for (int r = 0; r < arr.length; r++) {
+			sum += arr[r];
+
+			while (sum >= s) {
+				if (min > r - l + 1) {
+					res[0] = l;
+					res[1] = r;
+					min = r - l + 1;
+				}
+				sum -= arr[l++];
+			}
+
+		}
+		for (int m = res[0]; m <= res[1]; m++) {
+			System.out.print(arr[m] + " ");
+		}
+
+	}
+
+	public static void subArrayProductLessThanK(int arr[], int k) {
+		int prod = 1;
+		int left = 0;
+		for (int right = 0; right < arr.length; right++) {
+			prod *= arr[right];
+			while (left <= right && prod >= k) {
+				prod /= arr[left++];
+			}
+			for (int start = left; start <= right; start++) {
+				for (int j = start; j <= right; j++) {
+					System.out.print(arr[j] + " ");
+				}
+				System.out.println();
+			}
+		}
+	}
+
+	public static void majorityElement(int arr[]) {
+		List<Integer> res = new ArrayList<>();
+		int req = arr.length / 2;
+		HashMap<Integer, Integer> freq = new HashMap<>();
+		for (int i = 0; i < arr.length; i++)
+			freq.put(arr[i], freq.getOrDefault(arr[i], 0) + 1);
+
+		for (int key : freq.keySet()) {
+			if (freq.get(key) >= req) {
+				res.add(key);
+			}
+
+		}
+		System.out.println(res);
+	}
+
+	public static void longestSubArray(int arr[], int k) {
+		HashMap<Integer, List<Integer>> map = new HashMap<>();
+		map.put(0, Arrays.asList(-1));
+		int max = 0;
+		int currentSum = 0;
+		for (int i = 0; i < arr.length; i++) {
+			currentSum += arr[i];
+			if (map.containsKey(currentSum - k)) {
+				List<Integer> list = map.get(currentSum - k);
+				for (int m : list) {
+					max = Math.max(max, i - (m + 1) + 1);
+				}
+			}
+
+			map.computeIfAbsent(currentSum, x -> new ArrayList<>()).add(i);
+		}
+
+		System.out.println("max array = " + max);
+	}
+
+	public static void sumSubArray(int[] arr, int k) {
+		Map<Integer, List<Integer>> prefixMap = new HashMap<>();
+		prefixMap.put(0, new ArrayList<>(Arrays.asList(-1))); // for subarrays starting at 0
+		int currentSum = 0;
+		for (int i = 0; i < arr.length; i++) {
+			currentSum += arr[i];
+			if (prefixMap.containsKey(currentSum - k)) {
+				for (int startindex : prefixMap.get(currentSum - k)) {
+					System.out.println("start index = " + (startindex + 1) + " " + "endIndex " + i);
+					for (int j = startindex + 1; j <= i; j++) {
+						System.out.print(arr[j] + " ");
+					}
+				}
+			}
+
+			prefixMap.computeIfAbsent(currentSum, x -> new ArrayList<>()).add(i);
+		}
 	}
 
 	public static String minWindow(String s, String t) {
